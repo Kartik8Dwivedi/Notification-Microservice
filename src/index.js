@@ -3,13 +3,15 @@ const bodyParser = require("body-parser");
 const { setUpJobs } = require("./utils/job");
 
 const { PORT } = require("./config/serverConfig");
-const { sendEmail } = require("./services/email-service");
-const apiRoutes = require('./routes/index')
+const apiRoutes = require('./routes/index');
+const { createChannel } = require('./utils/messageQueue');
 
-const startServer = () => {
+const startServer = async () => {
   const app = express();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+
+const channel = await createChannel();
 
   app.use('/api', apiRoutes);
 
